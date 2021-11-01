@@ -1,0 +1,35 @@
+{
+  "name": "mercurius-redis-cache",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simone-sanfratello/mercurius-redis-cache.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simone-sanfratello/mercurius-redis-cache/issues"
+  },
+  "homepage": "https://github.com/simone-sanfratello/mercurius-redis-cache#readme",
+  "dependencies": {
+    "close-with-grace": "^1.1.0",
+    "env-schema": "^3.4.0",
+    "fastify": "^3.22.1",
+    "fastify-autoload": "^3.9.0",
+    "fastify-plugin": "^3.0.0",
+    "fastify-redis": "^4.3.3",
+    "fluent-json-schema": "^3.0.1",
+    "graphql-tools": "^8.2.0",
+    "mercurius": "^8.8.0",
+    "mnemonist": "^0.38.5",
+    "pino": "^7.0.5",
+    "pino-pretty": "^7.1.0",
+    "safe-stable-stringify": "^2.1.0"
+  }
+}
