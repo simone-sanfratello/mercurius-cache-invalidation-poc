@@ -3,28 +3,20 @@
 const fp = require('fastify-plugin')
 
 module.exports = fp(async (fastify, options) => {
-  const storageOptions = options.cache.type === 'redis'
-    ? {
-        ...options.cache.redis,
-        instance: fastify.redis,
-        log: fastify.log
-      }
-    : {
-        ...options.cache.memory,
-        log: fastify.log
-      }
-
-  fastify.register(require('../lib/cache'), {
+  fastify.register(require('mercurius-cache'), {
     ttl: options.cache.ttl,
+    // storage: { type: 'memory' },
     policy: {
       Query: {
         user: {
           references: (self, arg, ctx, info, result) => {
+            if(!result) { return }
             return [`user:${result.id}`]
           }
         },
         users: {
           references: (self, arg, ctx, info, result) => {
+            if(!result) { return }
             const references = result.map(user => (`user:${user.id}`))
             references.push('users')
             return references
@@ -32,11 +24,13 @@ module.exports = fp(async (fastify, options) => {
         },
         group: {
           references: (self, arg, ctx, info, result) => {
+            if(!result) { return }
             return [`group:${result.id}`]
           }
         },
         groups: {
           references: (self, arg, ctx, info, result) => {
+            if(!result) { return }
             const references = result.map(group => (`group:${group.id}`))
             references.push('groups')
             return references
@@ -83,12 +77,11 @@ module.exports = fp(async (fastify, options) => {
         }
       }
     },
-    storage: {
-      type: options.cache.type,
-      options: storageOptions
+    onDedupe: function (type, fieldName) {
+      console.log('***** dedupe cache', type, fieldName)
     },
     onHit: function (type, fieldName) {
-      console.log('***** hit from cache', type, fieldName)
+      // console.log('***** hit from cache', type, fieldName)
     },
     onMiss: function (type, fieldName) {
       console.log('***** miss from cache', type, fieldName)

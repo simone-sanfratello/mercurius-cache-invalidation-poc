@@ -2,6 +2,8 @@
 
 const fp = require('fastify-plugin')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
+const {promisify} = require('util')
+const sleep = promisify(setTimeout)
 
 // { user(id: 1) {name,groups { id }} }
 // { users(page: 2) {name} }
@@ -9,6 +11,13 @@ const { makeExecutableSchema } = require('@graphql-tools/schema')
 // { group(id:10) {name, users { name }}}
 // { users(page: 2) {name, groups{name}} }
 // mutation { addUser(user: { name: "John" }) {id, name}}
+
+/*
+autocannon 'http://localhost:3000/graphql' \
+-m POST -H 'content-type=application/json' \
+-b '{ "query": "{ user(id: 1) {name,groups { id }} }" }' \ 
+
+*/
 
 const db = {
   users: {
@@ -81,6 +90,7 @@ module.exports = fp(async (fastify, options) => {
     Query: {
       async user (_, { id }) {
         id = Number(id)
+        await sleep(1000)
         return db.users[id] ? { id, ...db.users[id] } : null
       },
 
